@@ -19,6 +19,7 @@ import android.net.Uri;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText mBookInput;
     private TextView mTitleText;
     private TextView mAuthorText;
-    private BookListAdapter  mAdapter;
+    private BookListAdapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,21 +40,21 @@ public class MainActivity extends AppCompatActivity {
         mBookInput = (EditText) findViewById(R.id.bookInput);
         mTitleText = (TextView) findViewById(R.id.title);
         mAuthorText = (TextView) findViewById(R.id.author);
-        mSearchButton=(Button) findViewById(R.id.searchButton);
+        mSearchButton = (Button) findViewById(R.id.searchButton);
 
         mAdapter = new BookListAdapter(this, new ArrayList<BookingList>());
         bookListView.setAdapter(mAdapter);
 
         mSearchButton.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
-        BookingList currentBoolinglist = mAdapter.getItem(position);
-        Uri bookinglistUri = Uri.parse(currentBoolinglist.getUrl());
-        Intent websiteIntent = new Intent(Intent.ACTION_VIEW, bookinglistUri);
-        startActivity(websiteIntent);
-    }
-});
+                BookingList currentBoolinglist = mAdapter.getItem(position);
+                Uri bookinglistUri = Uri.parse(currentBoolinglist.getUrl());
+                Intent websiteIntent = new Intent(Intent.ACTION_VIEW, bookinglistUri);
+                startActivity(websiteIntent);
+            }
+        });
     }
 
     public void searchBooks(View view) {
@@ -64,9 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (networkInfo != null && networkInfo.isConnected() && queryString.length() != 0) {
             new FetchBook(mTitleText, mAuthorText, mBookInput).execute(queryString);
-        }
-
-        else {
+        } else {
             if (queryString.length() == 0) {
                 mAuthorText.setText("");
                 mTitleText.setText(R.string.no_search_term);
