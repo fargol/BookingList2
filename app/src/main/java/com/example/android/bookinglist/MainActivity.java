@@ -10,6 +10,17 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ListView;
+import android.content.Intent;
+import android.content.Loader;
+import android.net.Uri;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText mBookInput;
     private TextView mTitleText;
     private TextView mAuthorText;
+    private BookListAdapter  mAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,11 +36,23 @@ public class MainActivity extends AppCompatActivity {
         ListView bookListView = (ListView) findViewById(R.id.list);
 
         mBookInput = (EditText) findViewById(R.id.bookInput);
-        mTitleText = (TextView) findViewById(R.id.titleText);
-        mAuthorText = (TextView) findViewById(R.id.authorText);
+        mTitleText = (TextView) findViewById(R.id.title);
+        mAuthorText = (TextView) findViewById(R.id.author);
+        mSearchButton=(Button) findViewById(R.id.searchButton);
 
         mAdapter = new BookListAdapter(this, new ArrayList<BookingList>());
         bookListView.setAdapter(mAdapter);
+
+        mSearchButton.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+        BookingList currentBoolinglist = mAdapter.getItem(position);
+        Uri bookinglistUri = Uri.parse(currentBoolinglist.getUrl());
+        Intent websiteIntent = new Intent(Intent.ACTION_VIEW, bookinglistUri);
+        startActivity(websiteIntent);
+    }
+});
     }
 
     public void searchBooks(View view) {
